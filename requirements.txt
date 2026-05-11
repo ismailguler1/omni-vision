@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+streamlit
+faiss-cpu
+torch
+torchvision
+Pillow
+google-generativeai
+python-dotenv
