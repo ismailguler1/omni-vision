@@ -38,6 +38,8 @@ if __name__ == "__main__":
     embeddings = []
     metadata = [] # ID'leri eşleştirmek için
 
+    
+    #deneme
     for idx, filename in enumerate(os.listdir(image_dir)):
         if filename.endswith((".jpg", ".png", ".jpeg")):
             path = os.path.join(image_dir, filename)
