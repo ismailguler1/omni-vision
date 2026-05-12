@@ -21,3 +21,14 @@ Projenin yerel ortamda sorunsuz çalışması için aşağıdaki adımları sır
 4. **Çevresel Değişkenleri Ayarlayın:**
    Kök dizinde bir `.env` dosyası oluşturun ve Gemini API anahtarınızı ekleyin:
    `GEMINI_API_KEY=sizin_api_anahtariniz`
+
+## 🚀 Sistemi İlk Kez Başlatma (Sadece Bir Kere Yapılır)
+
+Projenin veri tabanını ve görsel hafızasını oluşturmak için kurulumdan sonra şu iki komutu sırasıyla çalıştırın:
+1. `python app/models/vision_model.py` (Katalog görsellerini vektörleştirir ve FAISS indeksini oluşturur)
+2. `python app/database/init_db.py` (JSON verilerini SQLite veri tabanına yazar)
+
+## 💻 Günlük Çalıştırma
+
+Sistem verileri oluşturulduktan sonra projeyi başlatmak için her seferinde sadece şu komutu kullanmanız yeterlidir:
+`uvicorn app.main:app --reload`

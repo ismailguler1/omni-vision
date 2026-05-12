@@ -7,3 +7,7 @@ torchvision
 Pillow
 google-generativeai
 python-dotenv
+rembg
+rembg[cpu]
+requests
+pandas

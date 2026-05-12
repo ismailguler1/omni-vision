@@ -30,5 +30,62 @@
         "price": 349.90,
         "stock": 20,
         "image_filename": "1004_mavi_tshirt_katalog.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Siyah Pantolon",
+        "category": "Pantolon",
+        "price": 749.90,
+        "stock": 10,
+        "image_filename": "2001_siyah_pantolon_katalog.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Beyaz Pantolon",
+        "category": "Pantolon",
+        "price": 999.90,
+        "stock": 5,
+        "image_filename": "2002_beyaz_pantolon_katalog.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Kareli Pantolon",
+        "category": "Pantolon",
+        "price": 899.90,
+        "stock": 12,
+        "image_filename": "2003_kareli_pantolon_katalog.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Kahverengi Pantolon",
+        "category": "Pantolon",
+        "price": 990.50,
+        "stock": 20,
+        "image_filename": "2004_kahverengi_pantolon_katalog.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Bordo Elbise",
+        "category": "Elbise",
+        "price": 699.90,
+        "stock": 5,
+        "image_filename": "3002_bordo_elbise_katalog.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Mavi Gömlek",
+        "category": "Gömlek",
+        "price": 549.90,
+        "stock": 15,
+        "image_filename": "4004_mavi_gömlek_katalog.jpg"
+    },
+    
+    {
+        "id": 10,
+        "name": "Siyah Etek",
+        "category": "Etek",
+        "price": 299.90,
+        "stock": 20,
+        "image_filename": "5003_siyah_etek_katalog.jpg"
     }
 ]

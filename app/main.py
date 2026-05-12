@@ -4,7 +4,11 @@ import faiss
 import numpy as np
 import shutil
 import os
-from app.models.vision_model import OmniVisionModel # Kişi 1'in yazdığı modül
+from app.models.vision_model import OmniVisionModel
+from app.core.agent import get_agent_response
+from pydantic import BaseModel
+from rembg import remove
+from typing import Optional
 
 app = FastAPI(
     title="Omni-Vision API", 
@@ -49,8 +53,14 @@ async def match_product(file: UploadFile = File(...)):
 
     # 1. Gelen fotoğrafı geçici olarak kaydet (İşlem bitince silinecek)
     temp_path = f"temp_{file.filename}"
+
+    #input_image_data = await file.read() # Fotoğrafı oku
+    ## rembg ile arka planı yok et
+    #clean_image_data = remove(input_image_data)
+
     with open(temp_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+        #buffer.write(clean_image_data)
 
     try:
         # 2. Görselden vektör çıkar (Kişi 1'in modülü)
@@ -67,7 +77,7 @@ async def match_product(file: UploadFile = File(...)):
         # GÜVEN SKORU KONTROLÜ (Threshold)
         # Not: MobileNetV3 vektörleri için 150-200 arası bir sınır genelde idealdir. 
         # Bunu testlerle (örneğin kedi fotoğrafı yükleyerek) optimize edebilirsiniz.
-        THRESHOLD = 180.0 
+        THRESHOLD = 7000.0 
 
         if distance_score > THRESHOLD:
             return {
@@ -104,3 +114,21 @@ async def match_product(file: UploadFile = File(...)):
         # 5. Sistemi temiz tutmak için geçici dosyayı sil
         if os.path.exists(temp_path):
             os.remove(temp_path)
+    
+
+    # Kullanıcıdan gelecek chat mesajının yapısı
+class ChatRequest(BaseModel):
+    message: str
+    image_context: Optional[str] = None  # Artık açıkça "null" gelmesini de kabul ediyor
+
+@app.post("/chat/")
+async def chat_with_agent(request: ChatRequest):
+    """
+    Kullanıcının metin mesajlarını Gemini ajanı ile işler.
+    Eğer fonksiyon çağırması gerekirse (sipariş durumu vb.) otomatik yapar.
+    """
+    try:
+        reply = get_agent_response(request.message, request.image_context)
+        return {"status": "success", "reply": reply}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
