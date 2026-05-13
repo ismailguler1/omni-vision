@@ -40,8 +40,6 @@ Projenin yerel ortamda sorunsuz çalışması için aşağıdaki adımları sır
 **3. Gerekli Kütüphaneleri Yükleyin:**
 `pip install -r requirements.txt`
 
-*(Not: Windows'ta `rembg` motor hatası almamak için kurulum komutunu `pip install "rembg[cpu]"` şeklinde çalıştırmanız gerekebilir.)*
-
 **4. Çevresel Değişkenleri Ayarlayın:**
 Proje kök dizininde bir `.env` dosyası oluşturun ve Gemini API anahtarınızı ekleyin. 
 *(API Key almak için: https://aistudio.google.com/api-keys)*
