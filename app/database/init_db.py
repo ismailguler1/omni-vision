@@ -1,89 +1,64 @@
 import sqlite3
-import os
 import json
+import os
 
-# Veritabanı dosyasının oluşturulacağı yol
 DB_PATH = "app/database/omni_vision.db"
 JSON_PATH = "app/database/products.json"
 
 def create_tables(cursor):
-    """Gerekli tabloları (products ve orders) oluşturur."""
-    
-    # Ürünler Tablosu
+    # ÇOK KRİTİK: Eski tabloları tamamen kaldırıyoruz ki yeni kolonlar eklenebilsin
+    cursor.execute("DROP TABLE IF EXISTS products")
+    cursor.execute("DROP TABLE IF EXISTS orders")
+
+    # Ürünler Tablosu (Yeni 8 kolonlu yapı)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY, -- FAISS indeksindeki ID ile aynı olacak
-        name TEXT NOT NULL,
-        category TEXT,
+    CREATE TABLE products (
+        id INTEGER PRIMARY KEY,
+        name TEXT, 
+        category TEXT, 
         price REAL,
-        stock INTEGER,
+        stock_S INTEGER, 
+        stock_M INTEGER, 
+        stock_L INTEGER,
         image_filename TEXT
     )
     """)
 
-    # Siparişler Tablosu (Otomasyon testleri için)
+    # Siparişler Tablosu
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS orders (
+    CREATE TABLE orders (
         order_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        customer_phone TEXT,
+        customer_phone TEXT, 
         product_id INTEGER,
-        status TEXT,
-        FOREIGN KEY (product_id) REFERENCES products (id)
+        size TEXT, 
+        status TEXT, 
+        tracking_number TEXT
     )
     """)
-    print("Tablolar başarıyla oluşturuldu.")
 
-def insert_mock_data(cursor):
-    """Veritabanını test için sahte ürünler ve siparişlerle doldurur."""
-    
-    # 1. Sahte Ürünler (20-200 ürün arası bir yelpazeyi simüle etmek için örnekler)
-    # id değerleri 0'dan başlıyor çünkü FAISS vektör veritabanı indekslemeye 0'dan başlar.
-# 1. JSON dosyasından gerçek ürünleri oku
-    with open(JSON_PATH, "r", encoding="utf-8") as f:
-        products_data = json.load(f)
-
-    sample_products = [
-        (p["id"], p["name"], p["category"], p["price"], p["stock"], p["image_filename"])
-        for p in products_data
-    ]
-
-    # Tabloyu temizle (Kodu birden fazla kez çalıştırırsak veri çoğalmasın diye)
-    cursor.execute("DELETE FROM products")
-    cursor.execute("DELETE FROM orders")
-
-    # Ürünleri ekle
-    cursor.executemany("""
-    INSERT INTO products (id, name, category, price, stock, image_filename)
-    VALUES (?, ?, ?, ?, ?, ?)
-    """, sample_products)
-    print(f"{len(sample_products)} adet gerçek ürün JSON'dan eklendi.")
-
-    # 2. Sahte Siparişler ("Siparişim nerede?" soruları için)
-    sample_orders = [
-        ("5551234567", 0, "Kargoya Verildi"),
-        ("5559876543", 1, "Beklemede")
-    ]
-
-    cursor.executemany("""
-    INSERT INTO orders (customer_phone, product_id, status)
-    VALUES (?, ?, ?)
-    """, sample_orders)
-    print(f"{len(sample_orders)} adet mock sipariş eklendi.")
-
-def main():
-    # Veritabanına bağlan (dosya yoksa oluşturur)
+def setup():
+    if not os.path.exists("app/database"):
+        os.makedirs("app/database")
+        
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-
-    try:
-        create_tables(cursor)
-        insert_mock_data(cursor)
-        conn.commit() # Değişiklikleri kaydet
-        print(f"Veritabanı kurulumu tamamlandı. Dosya konumu: {DB_PATH}")
-    except sqlite3.Error as e:
-        print(f"Veritabanı hatası: {e}")
-    finally:
-        conn.close()
+    
+    # Tabloları tertemiz oluştur
+    create_tables(cursor)
+    
+    # JSON'dan 25 ürünü oku ve aktar
+    with open(JSON_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    for p in data:
+        cursor.execute("""
+            INSERT INTO products VALUES (?,?,?,?,?,?,?,?)
+        """, (p["id"], p["name"], p["category"], p["price"], 
+              p["stock_S"], p["stock_M"], p["stock_L"], p["image_filename"]))
+    
+    conn.commit()
+    conn.close()
+    print("🚀 Başarılı: Eski veritabanı silindi ve 25 ürünle 8 kolonlu yeni yapı kuruldu!")
 
 if __name__ == "__main__":
-    main()
+    setup()

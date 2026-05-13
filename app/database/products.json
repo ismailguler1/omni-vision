@@ -1,91 +1,27 @@
 [
-    {
-        "id": 0,
-        "name": "Kiraz Baskılı Beyaz Tişört",
-        "category": "Tshirt",
-        "price": 349.90,
-        "stock": 15,
-        "image_filename": "1001_beyaz_tshirt_katalog.jpg"
-    },
-    {
-        "id": 1,
-        "name": "Vintage Araba Baskılı Tişört",
-        "category": "Tişört",
-        "price": 399.90,
-        "stock": 5,
-        "image_filename": "1002_beyaz_tshirt_katalog.jpg"
-    },
-    {
-        "id": 2,
-        "name": "Kelebek ve Yıldız Baskılı Tişört",
-        "category": "Tişört",
-        "price": 299.90,
-        "stock": 0,
-        "image_filename": "1003_beyaz_tshirt_katalog.jpg"
-    },
-    {
-        "id": 3,
-        "name": "Papatya İşlemeli Mavi Tişört",
-        "category": "Tişört",
-        "price": 349.90,
-        "stock": 20,
-        "image_filename": "1004_mavi_tshirt_katalog.jpg"
-    },
-    {
-        "id": 4,
-        "name": "Siyah Pantolon",
-        "category": "Pantolon",
-        "price": 749.90,
-        "stock": 10,
-        "image_filename": "2001_siyah_pantolon_katalog.jpg"
-    },
-    {
-        "id": 5,
-        "name": "Beyaz Pantolon",
-        "category": "Pantolon",
-        "price": 999.90,
-        "stock": 5,
-        "image_filename": "2002_beyaz_pantolon_katalog.jpg"
-    },
-    {
-        "id": 6,
-        "name": "Kareli Pantolon",
-        "category": "Pantolon",
-        "price": 899.90,
-        "stock": 12,
-        "image_filename": "2003_kareli_pantolon_katalog.jpg"
-    },
-    {
-        "id": 7,
-        "name": "Kahverengi Pantolon",
-        "category": "Pantolon",
-        "price": 990.50,
-        "stock": 20,
-        "image_filename": "2004_kahverengi_pantolon_katalog.jpg"
-    },
-    {
-        "id": 8,
-        "name": "Bordo Elbise",
-        "category": "Elbise",
-        "price": 699.90,
-        "stock": 5,
-        "image_filename": "3002_bordo_elbise_katalog.jpg"
-    },
-    {
-        "id": 9,
-        "name": "Mavi Gömlek",
-        "category": "Gömlek",
-        "price": 549.90,
-        "stock": 15,
-        "image_filename": "4004_mavi_gömlek_katalog.jpg"
-    },
-    
-    {
-        "id": 10,
-        "name": "Siyah Etek",
-        "category": "Etek",
-        "price": 299.90,
-        "stock": 20,
-        "image_filename": "5003_siyah_etek_katalog.jpg"
-    }
+    {"id": 1001, "name": "Kiraz Baskılı Beyaz Tişört", "category": "Tişört", "price": 349.90, "stock_S": 5, "stock_M": 10, "stock_L": 2, "image_filename": "1001_beyaz_tshirt_katalog.jpg.jpeg"},
+    {"id": 1002, "name": "Vintage Araba Baskılı Tişört", "category": "Tişört", "price": 399.90, "stock_S": 3, "stock_M": 8, "stock_L": 5, "image_filename": "1002_beyaz_tshirt_katalog.jpg.jpeg"},
+    {"id": 1003, "name": "Kelebek ve Yıldız Baskılı Tişört", "category": "Tişört", "price": 299.90, "stock_S": 0, "stock_M": 4, "stock_L": 10, "image_filename": "1003_beyaz_tshirt_katalog.jpg.jpeg"},
+    {"id": 1004, "name": "Papatya İşlemeli Mavi Tişört", "category": "Tişört", "price": 349.90, "stock_S": 15, "stock_M": 0, "stock_L": 5, "image_filename": "1004_mavi_tshirt_katalog.jpg.jpeg"},
+    {"id": 1005, "name": "Güneş ve Ay Baskılı Beyaz Tişört", "category": "Tişört", "price": 349.90, "stock_S": 7, "stock_M": 12, "stock_L": 8, "image_filename": "1005_beyaz_tshirt_katalog.jpg.jpeg"},
+    {"id": 2001, "name": "Siyah Kumaş Pantolon", "category": "Pantolon", "price": 749.90, "stock_S": 0, "stock_M": 5, "stock_L": 8, "image_filename": "2001_siyah_pantolon_katalog.jpg.jpeg"},
+    {"id": 2002, "name": "Beyaz Keten Pantolon", "category": "Pantolon", "price": 999.90, "stock_S": 10, "stock_M": 15, "stock_L": 2, "image_filename": "2002_beyaz_pantolon_katalog.jpg.jpeg"},
+    {"id": 2003, "name": "Kareli Pantolon", "category": "Pantolon", "price": 899.90, "stock_S": 4, "stock_M": 6, "stock_L": 12, "image_filename": "2003_kareli_pantolon_katalog.jpg.jpeg"},
+    {"id": 2004, "name": "Kahverengi Pantolon", "category": "Pantolon", "price": 990.50, "stock_S": 8, "stock_M": 20, "stock_L": 0, "image_filename": "2004_kahverengi_pantolon_katalog.jpg.jpeg"},
+    {"id": 2005, "name": "Gri Baggy Pantolon", "category": "Pantolon", "price": 849.90, "stock_S": 5, "stock_M": 12, "stock_L": 7, "image_filename": "2005_baggy_pantolon_katalog (5).jpeg"},
+    {"id": 3001, "name": "Siyah Tokalı Elbise", "category": "Elbise", "price": 899.90, "stock_S": 3, "stock_M": 5, "stock_L": 2, "image_filename": "3001_siyah_tokalı_elbise_katalog.jpg.jpeg"},
+    {"id": 3002, "name": "Bordo Askılı Elbise", "category": "Elbise", "price": 699.90, "stock_S": 5, "stock_M": 2, "stock_L": 4, "image_filename": "3002_bordo_elbise_katalog.jpg.jpeg"},
+    {"id": 3003, "name": "Leopar Desenli Elbise", "category": "Elbise", "price": 799.90, "stock_S": 0, "stock_M": 8, "stock_L": 6, "image_filename": "3003_leopar_elbise_katalog.jpg.jpeg"},
+    {"id": 3004, "name": "Mavi Elbise", "category": "Elbise", "price": 849.90, "stock_S": 10, "stock_M": 12, "stock_L": 5, "image_filename": "3004_mavi_elbise_katalog.jpg.jpeg"},
+    {"id": 3005, "name": "Lacivert Elbise", "category": "Elbise", "price": 949.90, "stock_S": 4, "stock_M": 0, "stock_L": 8, "image_filename": "3005_lacivert_elbise_katalog.jpg.jpeg"},
+    {"id": 4001, "name": "Çizgili Gömlek", "category": "Gömlek", "price": 499.90, "stock_S": 5, "stock_M": 10, "stock_L": 3, "image_filename": "4001_çizgili_gömlek_katalog.jpg.jpeg"},
+    {"id": 4002, "name": "Bordo Gömlek", "category": "Gömlek", "price": 549.90, "stock_S": 8, "stock_M": 15, "stock_L": 0, "image_filename": "4002_bordo_gömlek_katalog.jpg.jpeg"},
+    {"id": 4003, "name": "Fırfırlı Gömlek", "category": "Gömlek", "price": 599.90, "stock_S": 2, "stock_M": 4, "stock_L": 6, "image_filename": "4003_fırfırlı_gömlek_katalog.jpg.jpeg"},
+    {"id": 4004, "name": "Mavi Gömlek", "category": "Gömlek", "price": 549.90, "stock_S": 12, "stock_M": 10, "stock_L": 15, "image_filename": "4004_mavi_gömlek_katalog.jpg.jpeg"},
+    {"id": 4005, "name": "Beyaz Gömlek", "category": "Gömlek", "price": 499.90, "stock_S": 20, "stock_M": 18, "stock_L": 10, "image_filename": "4005_beyaz_gömlek_katalog.jpg.jpeg"},
+    {"id": 5001, "name": "Bordo Etek", "category": "Etek", "price": 349.90, "stock_S": 5, "stock_M": 8, "stock_L": 3, "image_filename": "5001_bordo_etek_katalog.jpg.jpeg"},
+    {"id": 5002, "name": "Beyaz Etek", "category": "Etek", "price": 349.90, "stock_S": 10, "stock_M": 12, "stock_L": 5, "image_filename": "5002_beyaz_etek_katalog.jpg.jpeg"},
+    {"id": 5003, "name": "Siyah Fırfırlı Etek", "category": "Etek", "price": 299.90, "stock_S": 20, "stock_M": 18, "stock_L": 5, "image_filename": "5003_siyah_etek_katalog.jpg.jpeg"},
+    {"id": 5004, "name": "Pembe Etek", "category": "Etek", "price": 399.90, "stock_S": 4, "stock_M": 6, "stock_L": 10, "image_filename": "5004_pembe_etek_katalog.jpg.jpeg"},
+    {"id": 5005, "name": "Leopar Desenli Etek", "category": "Etek", "price": 449.90, "stock_S": 7, "stock_M": 2, "stock_L": 8, "image_filename": "5005_leopar_etek_katalog.jpg.jpeg"}
 ]

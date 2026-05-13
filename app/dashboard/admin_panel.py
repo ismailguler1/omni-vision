@@ -4,115 +4,122 @@ import pandas as pd
 import requests
 
 # Sayfa Ayarları
-st.set_page_config(page_title="Omni-Vision Dashboard", page_icon="👁️", layout="wide")
+st.set_page_config(page_title="Omni-Vision 2.0 Dashboard", page_icon="👁️", layout="wide")
 
-# API URL'leri (FastAPI sunucumuzun adresleri)
 API_MATCH_URL = "http://127.0.0.1:8000/match-product/"
 API_CHAT_URL = "http://127.0.0.1:8000/chat/"
 DB_PATH = "app/database/omni_vision.db"
 
-# Veritabanından veri çekme fonksiyonu
 def get_table_data(query):
     conn = sqlite3.connect(DB_PATH)
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
 
-# Ana Başlık
-st.title("👁️ Omni-Vision: Otonom Mağaza Asistanı")
+st.title("👁️ Omni-Vision 2.0: Otonom İşletme Merkezi")
 st.markdown("---")
 
-# Ekranı ikiye bölüyoruz: Sol (Müşteri Chat) - Sağ (Yönetici Paneli)
 col1, col2 = st.columns([1, 1.2])
 
 # ==========================================
-# SOL PANEL: MÜŞTERİ SİMÜLASYONU (CHAT)
+# SOL PANEL: MÜŞTERİ & MULTIMODAL CHAT
 # ==========================================
 with col1:
-    st.subheader("📱 Müşteri Ekranı (WhatsApp Simülasyonu)")
+    st.subheader("📱 Müşteri WhatsApp Hattı (Otonom)")
     
-    # Sohbet geçmişini tutmak için
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    if "matched_product_context" not in st.session_state:
-        st.session_state.matched_product_context = None
+    if "image_context" not in st.session_state:
+        st.session_state.image_context = None
 
-    # Görsel Yükleme Alanı
-    uploaded_file = st.file_uploader("Ürün fotoğrafı gönder (Görselden Arama):", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Ürün fotoğrafı gönder (Gemini Vision):", type=["jpg", "jpeg", "png"])
     
-    if uploaded_file is not None:
-        if st.button("Fotoğrafı Gönder ve Ara"):
-            with st.spinner("Omni-Vision AI fotoğrafı analiz ediyor..."):
-                files = {"file": (uploaded_file.name, uploaded_file, "image/jpeg")}
-                response = requests.post(API_MATCH_URL, files=files)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if data["status"] == "success":
-                        st.success(f"Eşleşme Bulundu: {data['product_name']}")
-                        st.write(f"**Kategori:** {data['category']} | **Fiyat:** {data['price']} TL | **Stok:** {data['stock_quantity']} adet")
-                        # LLM için bağlamı kaydet
-                        st.session_state.matched_product_context = f"{data['product_name']} (ID: {data['matched_id']}, Stok: {data['stock_quantity']})"
-                    else:
-                        st.warning(data.get("message", "Eşleşme bulunamadı veya görsel karmaşık."))
-                else:
-                    st.error("Görsel arama servisinde bir hata oluştu.")
+    if uploaded_file and st.button("Fotoğrafı Analiz Et"):
+        with st.spinner("Gemini ürünü inceliyor..."):
+            files = {"file": (uploaded_file.name, uploaded_file, "image/jpeg")}
+            response = requests.post(API_MATCH_URL, files=files)
+            if response.status_code == 200:
+                data = response.json()
+                st.session_state.image_context = data["analysis"]
+                st.info(f"Yapay Zeka Analizi: {data['analysis']}")
 
-    # Sohbet Arayüzü
+    # Chat Arayüzü
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Kullanıcıdan Metin Girişi
-    if prompt := st.chat_input("Mesajınızı yazın (Örn: Siparişim nerede? Veya bu üründen alacağım)"):
-        # Kullanıcı mesajını ekrana bas
+    if prompt := st.chat_input("Mesajınızı yazın..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        with st.chat_message("user"): st.markdown(prompt)
 
-        # Gemini Ajanına gönder
         with st.chat_message("assistant"):
-            with st.spinner("Asistan yazıyor..."):
-                payload = {
-                    "message": prompt,
-                    "image_context": st.session_state.matched_product_context
-                }
-                res = requests.post(API_CHAT_URL, json=payload)
-                if res.status_code == 200:
-                    reply = res.json().get("reply", "Bir hata oluştu.")
-                    st.markdown(reply)
-                    st.session_state.messages.append({"role": "assistant", "content": reply})
-                else:
-                    st.error(f"API Hatası: {res.status_code}")
+            payload = {"message": prompt, "image_context": st.session_state.image_context}
+            res = requests.post(API_CHAT_URL, json=payload)
+            reply = res.json().get("reply", "Hata!")
+            st.markdown(reply)
+            st.session_state.messages.append({"role": "assistant", "content": reply})
 
 # ==========================================
-# SAĞ PANEL: YÖNETİCİ KONTROL PANELİ
+# SAĞ PANEL: PERSONEL TAKİP EKRANI (LIVE)
 # ==========================================
 with col2:
-    st.subheader("⚙️ Yönetici Paneli (Canlı Veri)")
+    st.subheader("⚙️ Arka Plan Operasyon Takibi")
     
-    # Metrik Kartları
     try:
         products_df = get_table_data("SELECT * FROM products")
         orders_df = get_table_data("SELECT * FROM orders")
         
+        # Metrikler
         m1, m2, m3 = st.columns(3)
-        m1.metric("Toplam Ürün Çeşidi", len(products_df))
-        m2.metric("Bekleyen Siparişler", len(orders_df[orders_df['status'] != 'Teslim Edildi']))
-        m3.metric("Kritik Stok Uyarısı", len(products_df[products_df['stock'] < 5]))
+        m1.metric("Toplam Satış", len(orders_df))
+        m2.metric("Aktif Kargo", len(orders_df[orders_df['status'] == 'Kargoya Verildi']))
+        # Kritik Stok: Herhangi bir bedeni 2'nin altına düşenler
+        low_stock = products_df[(products_df['stock_S'] < 2) | (products_df['stock_M'] < 2) | (products_df['stock_L'] < 2)]
+        m3.metric("Kritik Stok Uyarısı", len(low_stock))
         
-        st.markdown("---")
-        st.write("📦 **Canlı Stok Durumu**")
-        # Stokta azalanları kırmızı ile göstermek için basit bir renklendirme stili
-        st.dataframe(products_df[['id', 'name', 'category', 'price', 'stock']].style.highlight_min(subset=['stock'], color='#ffcccc'), use_container_width=True)
+        st.write("📦 **Beden Bazlı Canlı Stok Durumu**")
+        st.dataframe(products_df[['id', 'name', 'stock_S', 'stock_M', 'stock_L', 'price']], use_container_width=True)
 
-        st.markdown("---")
-        st.write("🚚 **Son Siparişler**")
-        st.dataframe(orders_df, use_container_width=True)
+        st.write("🚚 **Otonom Oluşan Son Siparişler**")
+        st.dataframe(orders_df.tail(10), use_container_width=True)
         
-        # Ekranı manuel yenileme butonu
-        if st.button("🔄 Verileri Yenile"):
-            st.rerun()
+        if st.button("🔄 Verileri Tazele"): st.rerun()
 
     except Exception as e:
-        st.error(f"Veritabanı okunamadı. Lütfen önce veritabanını oluşturun. Hata: {e}")
+        st.error(f"Veri yüklenemedi: {e}")
+
+# app/dashboard/admin_panel.py içine eklenecek Kargo Yönetimi kısmı
+
+st.markdown("---")
+st.subheader("🚚 Sipariş & Kargo Yönetimi (Personel Ekranı)")
+
+# Bekleyen siparişleri çekelim
+def update_order_status(order_id, new_status, tracking_no):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE orders 
+        SET status = ?, tracking_number = ? 
+        WHERE order_id = ?
+    """, (new_status, tracking_no, order_id))
+    conn.commit()
+    conn.close()
+
+# Sadece "Hazırlanıyor" olan siparişleri listele
+pending_orders = get_table_data("SELECT * FROM orders WHERE status = 'Hazırlanıyor'")
+
+if not pending_orders.empty:
+    selected_order_id = st.selectbox("Güncellenecek Sipariş ID seçin:", pending_orders['order_id'])
+    
+    col_a, col_b = st.columns(2)
+    with col_a:
+        new_status = st.selectbox("Yeni Durum:", ["Hazırlanıyor", "Kargoya Verildi", "Teslim Edildi", "İptal Edildi"])
+    with col_b:
+        tracking_no = st.text_input("Kargo Takip No:", placeholder="Örn: TR123456789")
+
+    if st.button("Siparişi Güncelle ve Kaydet"):
+        update_order_status(selected_order_id, new_status, tracking_no)
+        st.success(f"{selected_order_id} nolu sipariş güncellendi!")
+        st.rerun()
+else:
+    st.info("Şu an kargoya verilmeyi bekleyen bir sipariş bulunmuyor.")        
