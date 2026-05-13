@@ -1,13 +1,9 @@
+streamlit
+pandas
+requests
 fastapi
 uvicorn
-streamlit
-faiss-cpu
-torch
-torchvision
-Pillow
 google-generativeai
 python-dotenv
+pillow
 rembg
-rembg[cpu]
-requests
-pandas

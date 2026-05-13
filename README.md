@@ -4,16 +4,27 @@ Omni-Vision, fiziksel mağaza ve online satışı birleştiren (hybrid) e-ticare
 
 Müşterilerin gönderdiği ürün fotoğraflarını saniyeler içinde analiz eder, stok durumunu kontrol eder ve doğal dil işleme (LLM) yetenekleriyle müşteri iletişimini, sipariş takibini ve ödeme süreçlerini tamamen otonom hale getirir.
 
-## 🚀 Proje Mimarisi ve Teknoloji Yığını
+## ✨ 2.0 "The Multimodal Era" Yenilikleri
 
-Sistem 3 ana katmandan oluşmaktadır:
-1. **Görsel Zeka (Computer Vision & FAISS):** Gelen müşteri fotoğrafları `MobileNetV3` modeli ile matematiksel vektörlere çevrilir ve yüksek hızlı benzerlik araması için `FAISS` indeksinde sorgulanarak katalogdaki en doğru ürünle eşleştirilir.
-2. **Otonom Ajan (LLM & RAG):** `Google Gemini 2.5 Flash` modeli üzerine kurulu ajanımız, müşteri mesajlarını anlar ve veritabanı üzerinde aksiyon almak için "Function Calling" (Sipariş sorgulama, ödeme linki oluşturma) yeteneklerini kullanır.
-3. **Merkezi Backend & Panel:** Tüm API akışı `FastAPI` ile yönetilirken, işletme sahibinin canlı stok ve sipariş takibi yapabildiği simülasyon arayüzü `Streamlit` ile geliştirilmiştir.
+* **🔍 Gemini Vision Match:** Eski nesil FAISS veya yerel vektör modelleri yerine, Google Gemini 2.0 Flash'ın multimodal yeteneği ile görsel anlama tabanlı, yüksek doğrulukta ürün eşleştirme.
+* **💰 Finansal Analitik Dashboard:** Toplam ciro, aktif sipariş sayısı ve kritik stok durumlarının admin paneli üzerinden anlık takibi.
+* **🖥️ Otonom İşlem Logları:** Arka planda çalışan yapay zeka ajanının (Function Calling) yaptığı her işlemin (stok düşüşü, sipariş onayı, kargo bildirimi) şeffaf terminal dökümü.
+* **📍 Nokta Atışı Stok Yönetimi:** S-M-L beden bazlı canlı stok takibi ve stoğu biten spesifik ürün-beden çiftleri için otomatik kritik uyarılar.
+* **⚡ Yüksek Performans:** `@st.cache_data` (Veri önbellekleme) ve `Session State Locking` (Analiz kilidi) ile optimize edilmiş, gecikmesiz kullanıcı deneyimi.
 
 ---
 
-## 🛠️ Kurulum Adımları (Geliştiriciler İçin)
+## 🚀 Teknoloji Yığını
+
+* **Multimodal AI Engine:** `Google Gemini 2.0 Flash` (Vision + Text + Function Calling)
+* **Backend:** `FastAPI` (Asenkron API katmanı)
+* **Frontend:** `Streamlit` (Modern, SaaS odaklı Admin & Müşteri arayüzü)
+* **Veri Yönetimi:** `SQLite` & `Pandas`
+* **Güvenlik:** `Python-Dotenv` (API Anahtarı izolasyonu)
+
+---
+
+## 🛠️ Kurulum ve Hazırlık
 
 Projenin yerel ortamda sorunsuz çalışması için aşağıdaki adımları sırasıyla uygulayın:
 
@@ -40,13 +51,9 @@ Proje kök dizininde bir `.env` dosyası oluşturun ve Gemini API anahtarınız�
 
 ## ⚙️ Sistemi İlk Kez Başlatma (Sadece Bir Kere Yapılır)
 
-Projenin veri tabanını ve görsel hafızasını oluşturmak için kurulumdan sonra şu iki komutu sırasıyla çalıştırın:
+Sistemin kullanacağı tabloları ve örnek verileri oluşturmak için veritabanını başlatın:
 
-1. Katalog görsellerini vektörleştirir ve FAISS indeksini oluşturur:
-`python app/models/vision_model.py`
-
-2. JSON verilerini SQLite veri tabanına yazar:
-`python app/database/init_db.py`
+python app/database/init_db.py
 
 ---
 
@@ -67,11 +74,21 @@ VS Code üzerinden yeni bir terminal açın, sanal ortamı tekrar aktif edin ve 
 ---
 
 ## 🎯 Demo Kullanım Senaryosu
-1. Sol panelden (Sanal WhatsApp) test amaçlı bir ürün görseli yükleyin.
-2. Sistem ürünü tanıyıp eşleştirdikten sonra, alt taraftaki mesaj kutusuna *"Bu üründen almak istiyorum, stokta var mı?"* yazın.
-3. Ajanın veritabanını kontrol edip size ödeme linki oluşturmasını izleyin.
-4. Müşteri sipariş durumu sormak için *"5551234567 numaralı telefonla verdiğim siparişimin durumu nedir?"* yazarak RAG entegrasyonunu test edin.
-5. Sağ panelden canlı stokların ve siparişlerin durumunu patron gözüyle inceleyin.
+Görsel Analiz: Müşteri, sol paneldeki "WhatsApp Hattı" simülasyonu üzerinden bir kıyafet fotoğrafı yükler. Gemini Vision, görseli katalogdaki ürün tanımlarıyla semantik olarak eşleştirir.
 
-## ⚠️ Bilinen Kısıtlamalar (Gelecek Vizyonu)
-MVP aşamasında, sistem arka planı karmaşık olan müşteri fotoğraflarında (Domain Shift) yanılabilmektedir. Gelecek sürümlerde görsel eşleştirme doğruluğunu artırmak için `YOLO` tabanlı otomatik obje kırpma (Object Detection) mimarisi eklenecektir.
+Otonom Satış: Müşteri "Bunu almak istiyorum" dediğinde Ajan, istenen bedeni stokta bulur, veritabanına anlık sipariş kaydını işler ve "İşlem Logları"na not düşer.
+
+Operasyonel Takip: İşletme sahibi, sağ paneldeki mavi metrik kartlarından güncel ciroyu takip eder ve renklendirilmiş stok tablosundan azalan ürünleri (Örn: Mavi Gömlek - L Beden) anında tespit eder.
+
+Kargo Yönetimi: Personel, sistem üzerinden kargo numarasını girdiğinde, sistem otonom olarak durumu günceller ve "Müşteriye bildirim iletildi" mesajı ile operasyonu tamamlar.
+
+## Performans ve Güvenlik Notları
+Analysis Lock: Aynı fotoğrafın sohbetteki her mesaj gönderiminde tekrar analiz edilmesini engelleyen processed_file_id kontrolü ile API maliyetleri ve gecikme süreleri sıfıra indirilmiştir.
+
+Smart Caching: Veritabanı yükünü minimize eden 60 saniyelik otomatik önbellekleme sistemi kullanılmıştır.
+
+Environment Safety: API anahtarları .env dosyasında izole edilmiştir ve .gitignore kuralları gereği uzak sunucuya (repo) gönderilmez.
+
+---
+
+Omni-Vision - İşletmenizi Geleceğin Otonom Dünyasına Taşır.
